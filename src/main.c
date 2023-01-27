@@ -412,7 +412,7 @@ gkrellm_start_timer(gint Hz)
 		interval = 1000 / Hz;
 		interval = interval * 60 / 63;	/* Compensate for overhead XXX */
 		timeout_id = g_timeout_add(interval,
-						(GtkFunction) update_monitors,NULL);
+						(GSourceFunc) update_monitors,NULL);
 		}
 	}
 
