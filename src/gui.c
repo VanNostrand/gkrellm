@@ -2410,19 +2410,19 @@ create_config_window(void)
 	gtk_box_pack_start(GTK_BOX(main_vbox), hbox, FALSE, FALSE, 0);
 
 	apply_button = gtk_button_new_from_stock(GTK_STOCK_APPLY);
-	GTK_WIDGET_SET_FLAGS(apply_button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(apply_button, 1);
 	g_signal_connect(G_OBJECT(apply_button), "clicked",
 				G_CALLBACK(apply_config), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), apply_button, TRUE, TRUE, 0);
 
 	close_button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
-	GTK_WIDGET_SET_FLAGS(close_button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(close_button, 1);
 	g_signal_connect(G_OBJECT(close_button), "clicked",
 				G_CALLBACK(close_config), GINT_TO_POINTER(1));
 	gtk_box_pack_start(GTK_BOX(hbox), close_button, TRUE, TRUE, 0);
 
 	button = gtk_button_new_from_stock(GTK_STOCK_OK);
-	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(button, 1);
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(OK_config), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
 	gtk_widget_grab_default(button);
