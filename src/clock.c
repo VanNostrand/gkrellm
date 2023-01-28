@@ -226,7 +226,7 @@ expose_event(GtkWidget *widget, GdkEventExpose *ev)
 	else if (widget == pclock->drawing_area)
 		pixmap = pclock->pixmap;
 	if (pixmap)
-		gdk_draw_drawable(widget->window, gkrellm_draw_GC(1), pixmap,
+		gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), pixmap,
 				ev->area.x, ev->area.y, ev->area.x, ev->area.y,
 				ev->area.width, ev->area.height);
 	return FALSE;
@@ -593,12 +593,12 @@ static GtkWidget	*cal_format_combo_box,
 static void
 cb_clock_cal(GtkWidget *widget, gpointer data)
 	{
-	loop_chime_enable = GTK_TOGGLE_BUTTON(loop_chime_button)->active;
+	loop_chime_enable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(loop_chime_button));
 
-	clock_enable = GTK_TOGGLE_BUTTON(clock_enable_button)->active;
+	clock_enable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(clock_enable_button));
 	clock_visibility();
 
-	cal_enable = GTK_TOGGLE_BUTTON(cal_enable_button)->active;
+	cal_enable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cal_enable_button));
 	cal_visibility();
 
 	draw_cal();

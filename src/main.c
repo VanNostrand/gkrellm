@@ -208,28 +208,28 @@ setup_colors()
 
 	if (_GK.draw1_GC == NULL)
 		{
-		_GK.draw1_GC = gdk_gc_new( win->window );
-		gdk_gc_copy( _GK.draw1_GC, win->style->white_gc );
+		_GK.draw1_GC = gdk_gc_new( gtk_widget_get_window(win) );
+		gdk_gc_copy( _GK.draw1_GC, gtk_widget_get_style(win)->white_gc );
 		}
 	if (_GK.draw2_GC == NULL)
 		{
-		_GK.draw2_GC = gdk_gc_new( win->window );
-		gdk_gc_copy( _GK.draw2_GC, win->style->white_gc );
+		_GK.draw2_GC = gdk_gc_new( gtk_widget_get_window(win) );
+		gdk_gc_copy( _GK.draw2_GC, gtk_widget_get_style(win)->white_gc );
 		}
 	if (_GK.draw3_GC == NULL)
 		{
-		_GK.draw3_GC = gdk_gc_new( win->window );
-		gdk_gc_copy( _GK.draw3_GC, win->style->white_gc );
+		_GK.draw3_GC = gdk_gc_new( gtk_widget_get_window(win) );
+		gdk_gc_copy( _GK.draw3_GC, gtk_widget_get_style(win)->white_gc );
 		}
 	if (_GK.draw_stencil_GC == NULL)
 		{
-		_GK.draw_stencil_GC = gdk_gc_new( win->window );
-		gdk_gc_copy(_GK.draw_stencil_GC, win->style->white_gc );
+		_GK.draw_stencil_GC = gdk_gc_new( gtk_widget_get_window(win) );
+		gdk_gc_copy(_GK.draw_stencil_GC, gtk_widget_get_style(win)->white_gc );
 		}
 	if (_GK.text_GC == NULL)
 		{
-		_GK.text_GC = gdk_gc_new( win->window );
-		gdk_gc_copy( _GK.text_GC, win->style->white_gc );
+		_GK.text_GC = gdk_gc_new( gtk_widget_get_window(win) );
+		gdk_gc_copy( _GK.text_GC, gtk_widget_get_style(win)->white_gc );
 		}
 
 	/* Set up the depth 1 GCs
@@ -240,7 +240,7 @@ setup_colors()
 		GdkBitmap	*dummy_bitmap;
 		GdkColor	bit_color;
 
-		dummy_bitmap = gdk_pixmap_new(top_window->window, 16, 16, 1);
+		dummy_bitmap = gdk_pixmap_new(gtk_widget_get_window(top_window), 16, 16, 1);
 		_GK.bit1_GC = gdk_gc_new(dummy_bitmap);
 		_GK.bit0_GC = gdk_gc_new(dummy_bitmap);
 		bit_color.pixel = 1;
@@ -274,7 +274,7 @@ set_or_save_position(gint save)
 				|  But don't update _GK.y_position if current gkrellm position
 				|  reflects a packed move (ie, not a user set position).
 				*/
-			gdk_window_get_position(top_window->window,
+			gdk_window_get_position(gtk_widget_get_window(top_window),
 					&_GK.x_position, &_GK.y_position);
 			}
 		if (   !_GK.no_config
@@ -305,7 +305,7 @@ set_or_save_position(gint save)
 				_GK.x_position = x_last = x;
 				_GK.y_position = y_last = y;
 				_GK.position_valid = TRUE;
-				gdk_window_move(gtree.window->window, x, y);
+				gdk_window_move(gtk_widget_get_window(gtree.window), x, y);
 				gkrellm_debug(DEBUG_POSITION, "startup_position moveto %d %d (valid)\n", x, y);
 				}
 			}
@@ -595,7 +595,7 @@ gkrellm_motion(GtkWidget *widget, GdkEventMotion *ev, gpointer data)
 		_GK.y_position = y;
 		_GK.x_position = x;
 		_GK.position_valid = TRUE;
-		gdk_window_move(top_window->window, x, y);
+		gdk_window_move(gtk_widget_get_window(top_window), x, y);
 		}
 	}
 
@@ -692,7 +692,7 @@ apply_frame_transparency(gboolean force)
 		{
 		if (gtree.window_transparency_mask)
 			g_object_unref(G_OBJECT(gtree.window_transparency_mask));
-		gtree.window_transparency_mask = gdk_pixmap_new(win->window, w, h, 1);
+		gtree.window_transparency_mask = gdk_pixmap_new(gtk_widget_get_window(win), w, h, 1);
 		w_prev = w;
 		h_prev = h;
 		}
@@ -761,7 +761,7 @@ side_frame_button_press(GtkWidget *widget, GdkEventButton *ev, gpointer data)
 		}
 	if (decorated || _GK.withdrawn)
 		return FALSE;
-	gdk_window_get_origin(gtree.window->window, &x_gkrell, &y_gkrell);
+	gdk_window_get_origin(gtk_widget_get_window(gtree.window), &x_gkrell, &y_gkrell);
 	direction = (x_gkrell < _GK.w_display / 2) ? CLOSE_LEFT : CLOSE_RIGHT;
 
 	if (ev->button == 2 || (_GK.m2 && ev->button == 1))
@@ -775,7 +775,7 @@ side_frame_button_press(GtkWidget *widget, GdkEventButton *ev, gpointer data)
 			while (gtk_events_pending())
 				gtk_main_iteration ();
 			if (direction == CLOSE_RIGHT)
-				gdk_window_move(gtree.window->window,
+				gdk_window_move(gtk_widget_get_window(gtree.window),
 								x_gkrell - _GK.chart_width, y_gkrell);
 			}
 		else
@@ -786,7 +786,7 @@ side_frame_button_press(GtkWidget *widget, GdkEventButton *ev, gpointer data)
 			while (gtk_events_pending())
 				gtk_main_iteration ();
 			if (direction == CLOSE_RIGHT)
-				gdk_window_move(gtree.window->window,
+				gdk_window_move(gtk_widget_get_window(gtree.window),
 								x_gkrell + _GK.chart_width, y_gkrell);
 			}
 		gdk_flush();  /* Avoid double click race */
@@ -932,8 +932,11 @@ draw_frame_caps(GkrellmMonitor *mon)
 
 	if (!mp->main_vbox || mp->cap_images_off)
 		return;
-	y = mp->main_vbox->allocation.y;
-	h = mp->main_vbox->allocation.height;
+	GtkAllocation allocation;
+	gtk_widget_get_allocation(mp->main_vbox, &allocation);
+	y = allocation.y;
+	gtk_widget_get_allocation(mp->main_vbox, &allocation);
+	h = allocation.height;
 	if (mon != gkrellm_mon_host())
 		y -= _GK.frame_top_height;
 
@@ -1094,7 +1097,9 @@ draw_frame_overlaps(void)
 			continue;
 		if (mp->top_spacer.image && !mp->spacer_overlap_off)
 			{
-			y = mp->top_spacer.image->allocation.y;
+			GtkAllocation allocation;
+			gtk_widget_get_allocation(mp->top_spacer.image, &allocation);
+			y = allocation.y;
 			if (mon != gkrellm_mon_host())
 				y -= _GK.frame_top_height;
 			draw_left_frame_overlap(mp->top_spacer.piximage->pixbuf,
@@ -1106,7 +1111,9 @@ draw_frame_overlaps(void)
 			}
 		if (mp->bottom_spacer.image && !mp->spacer_overlap_off)
 			{
-			y = mp->bottom_spacer.image->allocation.y;
+			GtkAllocation allocation;
+			gtk_widget_get_allocation(mp->bottom_spacer.image, &allocation);
+			y = allocation.y;
 			if (mon != gkrellm_mon_host())
 				y -= _GK.frame_top_height;
 			draw_left_frame_overlap(mp->bottom_spacer.piximage->pixbuf,
@@ -1162,8 +1169,8 @@ gkrellm_pack_side_frames(void)
 		return;
 		}
 
-	gdk_window_get_origin(gtree.window->window, &x_gkrell, &y_gkrell);
-	gdk_drawable_get_size(gtree.window->window, &w, &h);
+	gdk_window_get_origin(gtk_widget_get_window(gtree.window), &x_gkrell, &y_gkrell);
+	gdk_drawable_get_size(gtk_widget_get_window(gtree.window), &w, &h);
 	was_on_bottom = (y_gkrell + h >= _GK.h_display) ? TRUE : FALSE;
 
 	gkrellm_scale_piximage_to_pixmap(_GK.frame_left_piximage,
@@ -1207,7 +1214,7 @@ gkrellm_pack_side_frames(void)
 		{
 		if (_GK.y_position != y_gkrell && _GK.position_valid)
 			{
-			gdk_window_move(gtree.window->window,
+			gdk_window_move(gtk_widget_get_window(gtree.window),
 							_GK.x_position, _GK.y_position);
 			gkrellm_debug(DEBUG_POSITION,
 				"pack moveto %d %d=y_position (y_gkrell=%d y_bot=%d)\n",
@@ -1227,7 +1234,7 @@ gkrellm_pack_side_frames(void)
 				y_pack = 0;
 			if (_GK.position_valid)
 				{
-				gdk_window_move(gtree.window->window, _GK.x_position, y_pack);
+				gdk_window_move(gtk_widget_get_window(gtree.window), _GK.x_position, y_pack);
 				gkrellm_debug(DEBUG_POSITION,
 					"pack moveto %d %d=y_pack (y_gkrell=%d y_bot=%d)\n",
 					_GK.x_position, y_pack, y_gkrell, y_bottom);
@@ -1242,7 +1249,7 @@ gkrellm_pack_side_frames(void)
 				y_pack = 0;
 			if (_GK.position_valid)
 				{
-				gdk_window_move(gtree.window->window, _GK.x_position, y_pack);
+				gdk_window_move(gtk_widget_get_window(gtree.window), _GK.x_position, y_pack);
 				gkrellm_debug(DEBUG_POSITION,
 					"pack moveto %d %d=y_pack (y_gkrell=%d on_bottom)\n",
 					_GK.x_position, y_pack, y_gkrell);
@@ -1260,8 +1267,8 @@ edge_record()
 	{
 	gint	x, y, w, h;
 
-	gdk_window_get_origin(gtree.window->window, &x, &y);
-	gdk_drawable_get_size(gtree.window->window, &w, &h);
+	gdk_window_get_origin(gtk_widget_get_window(gtree.window), &x, &y);
+	gdk_drawable_get_size(gtk_widget_get_window(gtree.window), &w, &h);
 	on_edge[0] = (x <= 0) ? TRUE : FALSE;
 	on_edge[1] = (x + w >= _GK.w_display) ? TRUE : FALSE;
 	on_edge[2] = (y <= 0) ? TRUE : FALSE;
@@ -1275,7 +1282,7 @@ fix_edges()
 
 	if (!_GK.position_valid)
 		return;
-	gdk_window_get_origin(gtree.window->window, &x, &y);
+	gdk_window_get_origin(gtk_widget_get_window(gtree.window), &x, &y);
 	w = _GK.chart_width + _GK.frame_left_width + _GK.frame_right_width;
 	h = _GK.monitor_height + _GK.total_frame_height;
 
@@ -1300,7 +1307,7 @@ fix_edges()
 		/* A theme change move adjustment to keep all visible, but treat this
 		|  as a packing move so can bias to the last user set _GK.y_position.
 		*/
-		gdk_window_move(gtree.window->window, x, y);
+		gdk_window_move(gtk_widget_get_window(gtree.window), x, y);
 		if (y != _GK.y_position)
 			y_pack = y;
 		gkrellm_debug(DEBUG_POSITION,
@@ -1632,14 +1639,14 @@ cb_configure_notify(GtkWidget *widget, GdkEventConfigure *ev, gpointer data)
 	_GK.h_display = gdk_screen_get_height(gdk_screen_get_default());
 
 #if !defined(WIN32)
-	gdk_window_get_position(widget->window, &x, &y);
+	gdk_window_get_position(gtk_widget_get_window(widget), &x, &y);
 #else
 	/* Windows Gtk bug? */
 	x = ev->x;
 	y = ev->y;
 #endif
 
-	gdk_drawable_get_size(gtree.window->window, &w, &h);
+	gdk_drawable_get_size(gtk_widget_get_window(gtree.window), &w, &h);
 
 	w_gkrellm = _GK.chart_width + _GK.frame_left_width + _GK.frame_right_width;
 	h_gkrellm = _GK.monitor_height + _GK.total_frame_height;
@@ -1651,7 +1658,7 @@ cb_configure_notify(GtkWidget *widget, GdkEventConfigure *ev, gpointer data)
 		&& (w_gkrellm != w || h_gkrellm != h)
 	   )
 		{
-		gdk_window_resize(top_window->window, w_gkrellm, h_gkrellm);
+		gdk_window_resize(gtk_widget_get_window(top_window), w_gkrellm, h_gkrellm);
 		w = w_gkrellm;
 		h = h_gkrellm;
 		}
