@@ -232,7 +232,7 @@ net_wm_state(gchar *hint, gboolean state)
 	xev.xclient.data.l[1] = gdk_x11_get_xatom_by_name(hint);
 	xev.xclient.data.l[2] = 0;
 
-	XSendEvent(GDK_DISPLAY(), GDK_ROOT_WINDOW(),
+	XSendEvent(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_ROOT_WINDOW(),
 				False, SubstructureNotifyMask|SubstructureRedirectMask, &xev);
 	}
 
@@ -496,7 +496,7 @@ gkrellm_winop_flush_motion_events(void)
 	XEvent			xevent;
 
 	gdk_flush();
-	while (XCheckTypedEvent(GDK_DISPLAY(), MotionNotify, &xevent))
+	while (XCheckTypedEvent(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), MotionNotify, &xevent))
 		;
 	}
 
@@ -513,11 +513,11 @@ gkrellm_winop_updated_background(void)
   
 	if (!_GK.any_transparency)
 		return FALSE;
-	prop = XInternAtom(GDK_DISPLAY(), "_XROOTPMAP_ID", True);
+	prop = XInternAtom(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), "_XROOTPMAP_ID", True);
 	if (prop == None)
 		return FALSE;
   
-	XGetWindowProperty(GDK_DISPLAY(), GDK_ROOT_WINDOW(), prop, 0L, 1L, False,
+	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_ROOT_WINDOW(), prop, 0L, 1L, False,
 			AnyPropertyType, &ret_type, &fmt, &nitems, &bytes_after,
 			&prop_return);
 	if (prop_return && ret_type == XA_PIXMAP)
@@ -547,11 +547,11 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_chart(GkrellmChart *cp)
 		|| !cp->drawing_area || !cp->drawing_area->window
 	   )
 		return FALSE;
-	XTranslateCoordinates(GDK_DISPLAY(),
+	XTranslateCoordinates(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
 			GDK_WINDOW_XWINDOW(cp->drawing_area->window),
 			GDK_ROOT_WINDOW(),
 			0, 0, &x, &y, &child);
-	XSetTSOrigin(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), -x, -y);
+	XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
 
 	/* First make the chart totally transparent
 	*/
@@ -569,7 +569,7 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_chart(GkrellmChart *cp)
 	m = &cp->style->margin;
 	if (cp->top_spacer.pixmap)
 		{
-		XSetTSOrigin(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), -x, -(y - m->top));
+		XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -(y - m->top));
 		gdk_draw_rectangle(cp->top_spacer.pixmap, trans_gc,
 					TRUE, 0, 0, cp->w, cp->style->margin.top);
 		if (cp->transparency == 2 && cp->top_spacer.mask)
@@ -585,7 +585,7 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_chart(GkrellmChart *cp)
 
 	if (cp->bottom_spacer.pixmap)
 		{
-		XSetTSOrigin(GDK_DISPLAY(), GDK_GC_XGC(trans_gc),
+		XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc),
 					-x, -(y + cp->h - m->bottom));
 		gdk_draw_rectangle(cp->bottom_spacer.pixmap, trans_gc,
 					TRUE, 0, 0, cp->w, cp->style->margin.bottom);
@@ -614,11 +614,11 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_panel(GkrellmPanel *p)
 		|| !p->drawing_area || !p->drawing_area->window
 	   )
 		return FALSE;
-	XTranslateCoordinates(GDK_DISPLAY(),
+	XTranslateCoordinates(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
 			GDK_WINDOW_XWINDOW(p->drawing_area->window),
 			GDK_ROOT_WINDOW(),
 			0, 0, &x, &y, &child);
-	XSetTSOrigin(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), -x, -y);
+	XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
 
 	/* First make the panel totally transparent
 	*/
@@ -646,7 +646,7 @@ draw_rootpixmap_onto_transparent_spacers(GkrellmMonitor *mon, gint xr, gint yr)
 		{
 		x = xr + mp->top_spacer.image->allocation.x;
 		y = yr + mp->top_spacer.image->allocation.y;
-		XSetTSOrigin(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), -x, -y);
+		XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
 		gdk_draw_rectangle(mp->top_spacer.pixmap, trans_gc,
 				TRUE, 0, 0, _GK.chart_width, mp->top_spacer.height);
 		if (mp->top_spacer.mask)
@@ -663,7 +663,7 @@ draw_rootpixmap_onto_transparent_spacers(GkrellmMonitor *mon, gint xr, gint yr)
 		{
 		x = xr + mp->bottom_spacer.image->allocation.x;
 		y = yr + mp->bottom_spacer.image->allocation.y;
-		XSetTSOrigin(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), -x, -y);
+		XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
 		gdk_draw_rectangle(mp->bottom_spacer.pixmap, trans_gc,
 				TRUE, 0, 0, _GK.chart_width, mp->bottom_spacer.height);
 		if (mp->bottom_spacer.mask)
@@ -699,10 +699,10 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 
 	if (!_GK.any_transparency)
 		return;
-	prop = XInternAtom(GDK_DISPLAY(), "_XROOTPMAP_ID", True);
+	prop = XInternAtom(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), "_XROOTPMAP_ID", True);
 	if (prop == None)
 		return;
-	XGetWindowProperty(GDK_DISPLAY(), GDK_ROOT_WINDOW(), prop, 0L, 1L, False,
+	XGetWindowProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_ROOT_WINDOW(), prop, 0L, 1L, False,
 			AnyPropertyType, &ret_type, &fmt, &nitems, &bytes_after,
 			&prop_return);
 	if (prop_return && ret_type == XA_PIXMAP)
@@ -720,7 +720,7 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 
 	depth_ret = 0;
 	depth_visual = gdk_window_get_visual(top_window->window)->depth;
-	if (   !XGetGeometry(GDK_DISPLAY(), root_xpixmap, &root_return,
+	if (   !XGetGeometry(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), root_xpixmap, &root_return,
 				&x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret)
 		|| depth_ret != depth_visual
 	   )
@@ -732,8 +732,8 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 	/* I could use gdk_pixmap_foreign_new() and stay in the gdk domain,
 	|  but it fails (in XGetGeometry()) if I change backgrounds.
 	*/
-	XSetTile(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), root_xpixmap);
-	XSetFillStyle(GDK_DISPLAY(), GDK_GC_XGC(trans_gc), FillTiled);
+	XSetTile(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), root_xpixmap);
+	XSetFillStyle(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), FillTiled);
 	for (list = gkrellm_get_chart_list(); list; list = list->next)
 		{
 		cp = (GkrellmChart *) list->data;
@@ -749,7 +749,7 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 			continue;
 		gkrellm_draw_panel_label(p);
 		}
-	XTranslateCoordinates(GDK_DISPLAY(),
+	XTranslateCoordinates(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
 			GDK_WINDOW_XWINDOW(top_window->window),
 			GDK_ROOT_WINDOW(),
 			0, 0, &x_root, &y_root, &child);
