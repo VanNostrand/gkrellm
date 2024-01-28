@@ -2098,7 +2098,7 @@ create_config_page(GkrellmMonitor *mon, GtkTreeStore *tree, GtkTreeIter *iter,
 
 	vbox = gtk_vbox_new(FALSE, 0);
 	gtk_notebook_append_page(notebook, vbox, NULL);
-	page = g_list_length(notebook->children) - 1;
+	page = gtk_notebook_get_n_pages(notebook) - 1;
 
 	if (mon)
 		mon->privat->config_page = page;
