@@ -1289,9 +1289,9 @@ cb_font_dialog(GtkWidget *widget, AltFontSelect *afs)
 	fsd = GTK_FONT_SELECTION_DIALOG(w);
 	afs->fontseldlg = fsd;
 	gtk_font_selection_dialog_set_font_name(fsd, afs->string);
-	g_signal_connect(G_OBJECT(fsd->ok_button), "clicked",
+	g_signal_connect(gtk_font_selection_dialog_get_ok_button(fsd), "clicked",
 			G_CALLBACK(cb_font_dialog_ok), afs);
-	g_signal_connect_swapped(G_OBJECT(fsd->cancel_button), "clicked",
+	g_signal_connect_swapped(gtk_font_selection_dialog_get_cancel_button(fsd), "clicked",
 			G_CALLBACK(gtk_widget_destroy), fsd);
 	g_signal_connect(G_OBJECT(fsd), "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &afs->fontseldlg);
