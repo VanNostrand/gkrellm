@@ -723,7 +723,7 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 		}
 
 	depth_ret = 0;
-	depth_visual = gdk_window_get_visual(gtk_widget_get_window(top_window))->depth;
+	gdk_window_get_geometry(gtk_widget_get_window(top_window), NULL, NULL, NULL, NULL, &depth_visual);
 	if (   !XGetGeometry(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), root_xpixmap, &root_return,
 				&x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret)
 		|| depth_ret != depth_visual
