@@ -644,8 +644,10 @@ draw_rootpixmap_onto_transparent_spacers(GkrellmMonitor *mon, gint xr, gint yr)
 
 	if (mp->top_spacer.image)
 		{
-		x = xr + mp->top_spacer.image->allocation.x;
-		y = yr + mp->top_spacer.image->allocation.y;
+		GtkAllocation allocation;
+		gtk_widget_get_allocation(mp->top_spacer.image, &allocation);
+		x = xr + allocation.x;
+		y = yr + allocation.y;
 		XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
 		gdk_draw_rectangle(mp->top_spacer.pixmap, trans_gc,
 				TRUE, 0, 0, _GK.chart_width, mp->top_spacer.height);
@@ -661,8 +663,10 @@ draw_rootpixmap_onto_transparent_spacers(GkrellmMonitor *mon, gint xr, gint yr)
 		}
 	if (mp->bottom_spacer.image)
 		{
-		x = xr + mp->bottom_spacer.image->allocation.x;
-		y = yr + mp->bottom_spacer.image->allocation.y;
+		GtkAllocation allocation;
+		gtk_widget_get_allocation(mp->bottom_spacer.image, &allocation);
+		x = xr + allocation.x;
+		y = yr + allocation.y;
 		XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
 		gdk_draw_rectangle(mp->bottom_spacer.pixmap, trans_gc,
 				TRUE, 0, 0, _GK.chart_width, mp->bottom_spacer.height);
