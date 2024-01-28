@@ -64,7 +64,7 @@ gkrellm_message_dialog(gchar *title, gchar *message)
 
 	vbox = gtk_vbox_new(FALSE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox,
 				FALSE, FALSE, 0);
 
 	label = gtk_label_new(message);
@@ -104,7 +104,7 @@ gkrellm_config_message_dialog(gchar *title, gchar *message)
 				"Gkrellm_dialog", "Gkrellm");
 	vbox = gtk_vbox_new(FALSE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox,
 				FALSE, FALSE, 0);
 
 	label = gtk_label_new(message);
