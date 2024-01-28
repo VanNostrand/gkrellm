@@ -225,7 +225,7 @@ net_wm_state(gchar *hint, gboolean state)
 
 	xev.type = ClientMessage;
 	xev.xclient.type = ClientMessage;
-	xev.xclient.window = GDK_WINDOW_XWINDOW(gkrellm_get_top_window()->window);
+	xev.xclient.window = GDK_WINDOW_XWINDOW(gtk_widget_get_window(gkrellm_get_top_window()));
 	xev.xclient.message_type = gdk_x11_get_xatom_by_name("_NET_WM_STATE");
 	xev.xclient.format = 32;
 	xev.xclient.data.l[0] = state ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
@@ -338,8 +338,8 @@ gkrellm_winop_update_struts(void)
 	if (!_GK.is_dock_type)
 		return;
 
-	display = GDK_WINDOW_XDISPLAY(gkrellm_get_top_window()->window);
-	window  = GDK_WINDOW_XWINDOW(gkrellm_get_top_window()->window);
+	display = GDK_WINDOW_XDISPLAY(gtk_widget_get_window(gkrellm_get_top_window()));
+	window  = GDK_WINDOW_XWINDOW(gtk_widget_get_window(gkrellm_get_top_window()));
 
 	if (net_wm_strut_partial == None)
 		{
@@ -394,8 +394,8 @@ gkrellm_winop_options(gint argc, gchar **argv)
 		exit(0);
 		}
 	smc_connect(argc, argv);
-	display = GDK_WINDOW_XDISPLAY(gkrellm_get_top_window()->window);
-	window  = GDK_WINDOW_XWINDOW(gkrellm_get_top_window()->window);
+	display = GDK_WINDOW_XDISPLAY(gtk_widget_get_window(gkrellm_get_top_window()));
+	window  = GDK_WINDOW_XWINDOW(gtk_widget_get_window(gkrellm_get_top_window()));
 
 	/* Set window type or list of states using standard EWMH hints.
 	|  See http://www.freedesktop.org/
@@ -448,8 +448,8 @@ gkrellm_winop_withdrawn(void)
 
 	if (!_GK.withdrawn)
 		return;
-	display = GDK_WINDOW_XDISPLAY(gkrellm_get_top_window()->window);
-	window  = GDK_WINDOW_XWINDOW(gkrellm_get_top_window()->window);
+	display = GDK_WINDOW_XDISPLAY(gtk_widget_get_window(gkrellm_get_top_window()));
+	window  = GDK_WINDOW_XWINDOW(gtk_widget_get_window(gkrellm_get_top_window()));
 
 	if (!_GK.is_dock_type)
 		{
@@ -483,7 +483,7 @@ gkrellm_winop_place_gkrellm(gchar *geom)
 		y = _GK.h_display - h_gkrell + y;
 	if (place & XNegative)
 		x = _GK.w_display - w_gkrell + x;
-	gdk_window_move(gkrellm_get_top_window()->window, x, y);
+	gdk_window_move(gtk_widget_get_window(gkrellm_get_top_window()), x, y);
 	_GK.y_position = y;
 	_GK.x_position = x;
 	_GK.position_valid = TRUE;
@@ -544,11 +544,11 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_chart(GkrellmChart *cp)
 	gint			x, y;
 
 	if (   root_xpixmap == None || trans_gc == NULL || !cp->transparency
-		|| !cp->drawing_area || !cp->drawing_area->window
+		|| !cp->drawing_area || !gtk_widget_get_window(cp->drawing_area)
 	   )
 		return FALSE;
 	XTranslateCoordinates(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-			GDK_WINDOW_XWINDOW(cp->drawing_area->window),
+			GDK_WINDOW_XWINDOW(gtk_widget_get_window(cp->drawing_area)),
 			GDK_ROOT_WINDOW(),
 			0, 0, &x, &y, &child);
 	XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
@@ -611,11 +611,11 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_panel(GkrellmPanel *p)
 	gint	x, y;
 
 	if (   root_xpixmap == None || trans_gc == NULL || !p->transparency
-		|| !p->drawing_area || !p->drawing_area->window
+		|| !p->drawing_area || !gtk_widget_get_window(p->drawing_area)
 	   )
 		return FALSE;
 	XTranslateCoordinates(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-			GDK_WINDOW_XWINDOW(p->drawing_area->window),
+			GDK_WINDOW_XWINDOW(gtk_widget_get_window(p->drawing_area)),
 			GDK_ROOT_WINDOW(),
 			0, 0, &x, &y, &child);
 	XSetTSOrigin(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), GDK_GC_XGC(trans_gc), -x, -y);
@@ -714,12 +714,12 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 		return;
 	if (trans_gc == NULL)
 		{
-		trans_gc = gdk_gc_new(top_window->window);
+		trans_gc = gdk_gc_new(gtk_widget_get_window(top_window));
 		gdk_gc_copy(trans_gc, _GK.draw1_GC);
 		}
 
 	depth_ret = 0;
-	depth_visual = gdk_window_get_visual(top_window->window)->depth;
+	depth_visual = gdk_window_get_visual(gtk_widget_get_window(top_window))->depth;
 	if (   !XGetGeometry(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), root_xpixmap, &root_return,
 				&x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret)
 		|| depth_ret != depth_visual
@@ -750,7 +750,7 @@ gkrellm_winop_apply_rootpixmap_transparency(void)
 		gkrellm_draw_panel_label(p);
 		}
 	XTranslateCoordinates(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-			GDK_WINDOW_XWINDOW(top_window->window),
+			GDK_WINDOW_XWINDOW(gtk_widget_get_window(top_window)),
 			GDK_ROOT_WINDOW(),
 			0, 0, &x_root, &y_root, &child);
 	for (list = gkrellm_monitor_list; list; list = list->next)

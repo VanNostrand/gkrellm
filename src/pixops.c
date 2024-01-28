@@ -74,7 +74,7 @@ gkrellm_clone_pixmap(GdkPixmap **dest, GdkPixmap **src)
 			gkrellm_free_pixmap(dest);
 		}
 	if (!*dest)
-		*dest = gdk_pixmap_new(gkrellm_get_top_window()->window,
+		*dest = gdk_pixmap_new(gtk_widget_get_window(gkrellm_get_top_window()),
 					w_src, h_src, -1);
 	gdk_draw_drawable(*dest, _GK.draw1_GC, *src, 0, 0, 0, 0, w_src, h_src);
 	return TRUE;	
@@ -100,7 +100,7 @@ gkrellm_clone_bitmap(GdkBitmap **dest, GdkBitmap **src)
 			gkrellm_free_bitmap(dest);
 		}
 	if (!*dest)
-		*dest = gdk_pixmap_new(gkrellm_get_top_window()->window,
+		*dest = gdk_pixmap_new(gtk_widget_get_window(gkrellm_get_top_window()),
 					w_src, h_src, 1);
 	gdk_draw_drawable(*dest, _GK.bit1_GC, *src, 0, 0, 0, 0, w_src, h_src);
 	return TRUE;	
@@ -123,7 +123,7 @@ gboolean
 gkrellm_scale_pixbuf_to_pixmap(GdkPixbuf *src_pixbuf, GdkPixmap **pixmap,
 			GdkBitmap **mask, gint w_dst, gint h_dst)
 	{
-	GdkWindow		*window = gkrellm_get_top_window()->window;
+	GdkWindow		*window = gtk_widget_get_window(gkrellm_get_top_window());
 	GdkPixbuf		*dst_pixbuf;
 	gint			w_src, h_src;
 	gboolean		has_alpha;
@@ -331,7 +331,7 @@ gboolean
 gkrellm_scale_piximage_to_pixmap(GkrellmPiximage *piximage, GdkPixmap **pixmap,
 			GdkBitmap **mask, gint w_dst, gint h_dst)
 	{
-	GdkWindow		*window = gkrellm_get_top_window()->window;
+	GdkWindow		*window = gtk_widget_get_window(gkrellm_get_top_window());
 	GdkPixbuf		*src_pixbuf, *dst_pixbuf;
 	gint			w_src, h_src;
 	gboolean		has_alpha;
@@ -436,7 +436,7 @@ gboolean
 gkrellm_scale_theme_background(GkrellmPiximage *piximage, GdkPixmap **pixmap,
 			GdkBitmap **mask, gint w_dst, gint h_dst)
 	{
-	GdkWindow		*window = gkrellm_get_top_window()->window;
+	GdkWindow		*window = gtk_widget_get_window(gkrellm_get_top_window());
 	GdkPixbuf		*src_pixbuf, *sub_pixbuf, *pixbuf;
 	GdkInterpType	interp_type;
 	GkrellmBorder	bdr;
