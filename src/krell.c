@@ -648,13 +648,13 @@ reset_text_layer_pixmap_decal_region(GkrellmPanel *p, GkrellmDecal *d)
 	{
 	if (d->flags & DF_MOVED)
 		{
-		gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC,
+		gkrellm_draw_drawable(p->bg_text_layer_pixmap,
 					p->bg_pixmap,
 					d->x_old, d->y_old, d->x_old, d->y_old, d->w, d->h);
 		d->flags &= ~DF_MOVED;
 		}
 	else
-		gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC,
+		gkrellm_draw_drawable(p->bg_text_layer_pixmap,
 					p->bg_pixmap,
 					d->x, d->y,  d->x, d->y,   d->w, d->h);
 	}
@@ -863,10 +863,10 @@ gkrellm_remove_krell(GkrellmPanel *p, GkrellmKrell *k)
 	dr = &k->draw;
 	if (p->pixmap && p->bg_pixmap)
 		{
-		gdk_draw_drawable(p->pixmap, _GK.draw1_GC, p->bg_pixmap,
+		gkrellm_draw_drawable(p->pixmap, p->bg_pixmap,
 			dr->x_dst, dr->y_dst, dr->x_dst, dr->y_dst, dr->w, dr->h);
 		if (p->drawing_area && gtk_widget_get_window(p->drawing_area))
-			gdk_draw_drawable(gtk_widget_get_window(p->drawing_area), _GK.draw1_GC,
+			gkrellm_draw_drawable(gtk_widget_get_window(p->drawing_area),
 				p->bg_pixmap,
 				dr->x_dst, dr->y_dst, dr->x_dst, dr->y_dst, dr->w, dr->h);
 		gkrellm_draw_panel_layers_force(p);
@@ -1153,10 +1153,10 @@ _remove_decal(GkrellmPanel *p, GkrellmDecal *d)
 	d->panel = NULL;
 	if (p->pixmap && p->bg_pixmap)
 		{
-		gdk_draw_drawable(p->pixmap, _GK.draw1_GC, p->bg_pixmap,
+		gkrellm_draw_drawable(p->pixmap, p->bg_pixmap,
 				d->x, d->y,  d->x, d->y,   d->w, d->h);
 		if (p->drawing_area && gtk_widget_get_window(p->drawing_area))
-			gdk_draw_drawable(gtk_widget_get_window(p->drawing_area), _GK.draw1_GC,
+			gkrellm_draw_drawable(gtk_widget_get_window(p->drawing_area),
 					p->bg_pixmap, d->x, d->y,  d->x, d->y,   d->w, d->h);
 		gkrellm_draw_panel_layers_force(p);
 		}
