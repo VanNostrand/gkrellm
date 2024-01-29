@@ -173,7 +173,7 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_chart(GkrellmChart *p)
 	if (p->transparency == 2 && p->bg_mask)
 		{
 		gdk_gc_set_clip_mask(_GK.text_GC, p->bg_mask);
-		gdk_draw_drawable(p->bg_src_pixmap, _GK.text_GC, p->bg_clean_pixmap,
+		gkrellm_draw_drawable(p->bg_src_pixmap, p->bg_clean_pixmap,
 			0, 0, 0, 0, p->w, p->h);
 		}
 
@@ -198,7 +198,7 @@ gkrellm_winop_draw_rootpixmap_onto_transparent_panel(GkrellmPanel *p)
 	if (p->transparency == 2 && p->bg_mask)
 		{
 		gdk_gc_set_clip_mask(_GK.text_GC, p->bg_mask);
-		gdk_draw_drawable(p->bg_pixmap, _GK.text_GC, p->bg_clean_pixmap,
+		gkrellm_draw_drawable(p->bg_pixmap, p->bg_clean_pixmap,
 			0, 0, 0, 0, p->w, p->h);
 		gdk_gc_set_clip_mask(_GK.text_GC, NULL);
 		}
@@ -219,7 +219,7 @@ draw_rootpixmap_onto_transparent_spacers(GkrellmMonitor *mon)
 		if (mp->top_spacer.mask)
 		{
 			gdk_gc_set_clip_mask(_GK.text_GC, mp->top_spacer.mask);
-			gdk_draw_drawable(mp->top_spacer.pixmap, _GK.text_GC,
+			gkrellm_draw_drawable(mp->top_spacer.pixmap,
 				mp->top_spacer.clean_pixmap, 0, 0, 0, 0, _GK.chart_width,
 				mp->top_spacer.height);
 		}
@@ -237,7 +237,7 @@ draw_rootpixmap_onto_transparent_spacers(GkrellmMonitor *mon)
 		if (mp->bottom_spacer.mask)
 		{
 			gdk_gc_set_clip_mask(_GK.text_GC, mp->bottom_spacer.mask);
-			gdk_draw_drawable(mp->bottom_spacer.pixmap, _GK.text_GC,
+			gkrellm_draw_drawable(mp->bottom_spacer.pixmap,
 				mp->bottom_spacer.clean_pixmap, 0, 0, 0, 0, _GK.chart_width,
 				mp->bottom_spacer.height);
 		}
