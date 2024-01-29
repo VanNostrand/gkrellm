@@ -287,19 +287,19 @@ static void
 draw_panel(GkrellmPanel *p, gint to_screen)
 	{
 	if (!gkrellm_winop_draw_rootpixmap_onto_transparent_panel(p))
-		gdk_draw_drawable(p->bg_pixmap, _GK.draw1_GC, p->bg_clean_pixmap,
+		gkrellm_draw_drawable(p->bg_pixmap, p->bg_clean_pixmap,
 					0, 0, 0, 0, p->w, p->h);
 
-	gdk_draw_drawable(p->pixmap, _GK.draw1_GC, p->bg_pixmap,
+	gkrellm_draw_drawable(p->pixmap, p->bg_pixmap,
 					0, 0, 0, 0, p->w, p->h);
 	draw_panel_label(p, TRUE);
 
-	gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC, p->bg_pixmap,
+	gkrellm_draw_drawable(p->bg_text_layer_pixmap, p->bg_pixmap,
 					0, 0, 0, 0, p->w, p->h);
 
 	if (gtk_widget_get_window(p->drawing_area) && to_screen)
 		{
-		gdk_draw_drawable(gtk_widget_get_window(p->drawing_area), _GK.draw1_GC, p->pixmap,
+		gkrellm_draw_drawable(gtk_widget_get_window(p->drawing_area), p->pixmap,
 					0, 0, 0, 0, p->w, p->h);
 		gkrellm_draw_panel_layers_force(p);
 		}
@@ -744,13 +744,13 @@ panel_draw_decal_text_layer(GkrellmPanel *p)
 			{
 			if (d->flags & DF_MOVED)
 				{
-				gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC,
+				gkrellm_draw_drawable(p->bg_text_layer_pixmap,
 					p->bg_pixmap,
 					d->x_old, d->y_old, d->x_old, d->y_old, d->w, d->h);
 				d->flags &= ~DF_MOVED;
 				}
 			else
-				gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC,
+				gkrellm_draw_drawable(p->bg_text_layer_pixmap,
 					p->bg_pixmap,
 					d->x, d->y,  d->x, d->y,   d->w, d->h);
 
@@ -795,6 +795,7 @@ push_decal_pixmaps(GkrellmPanel *p, gboolean top_layer)
 			x = d->x_off;
 			y = d->y_off;
 
+			// TODO: replacing with gkrellm_draw_drawable destroys uname text
 			gdk_draw_drawable(p->pixmap, _GK.draw1_GC, d->pixmap,
 						-x, -y, d->x, d->y, d->w, d->h);
 			if (d->flags & DF_SCROLL_TEXT_H_LOOP)
@@ -802,7 +803,7 @@ push_decal_pixmaps(GkrellmPanel *p, gboolean top_layer)
 				x %= d->scroll_width;
 				if (x > 0)
 					{
-					gdk_draw_drawable(p->pixmap, _GK.draw1_GC, d->pixmap,
+					gkrellm_draw_drawable(p->pixmap, d->pixmap,
 							d->scroll_width - x, -y,
 							d->x, d->y, x, d->h);
 					}
@@ -810,7 +811,7 @@ push_decal_pixmaps(GkrellmPanel *p, gboolean top_layer)
 						 && (w = d->scroll_width + x) < d->w
 						)
 					{
-					gdk_draw_drawable(p->pixmap, _GK.draw1_GC, d->pixmap,
+					gkrellm_draw_drawable(p->pixmap, d->pixmap,
 							0, -y,
 							d->x + w, d->y, d->w - w, d->h);
 					}
@@ -819,13 +820,13 @@ push_decal_pixmaps(GkrellmPanel *p, gboolean top_layer)
 				{
 				y %= d->scroll_height + d->y_ink;
 				if (y > 0)
-					gdk_draw_drawable(p->pixmap, _GK.draw1_GC, d->pixmap,
+					gkrellm_draw_drawable(p->pixmap, d->pixmap,
 							-x, d->scroll_height + d->y_ink - y,
 							d->x, d->y, d->w, y);
 				else if (   y <= 0
 						 && (h = d->scroll_height + d->y_ink + y) < d->h
 						)
-					gdk_draw_drawable(p->pixmap, _GK.draw1_GC, d->pixmap,
+					gkrellm_draw_drawable(p->pixmap, d->pixmap,
 							-x, 0,
 							d->x, d->y + h, d->w, d->h - h);
 				}
@@ -834,6 +835,7 @@ push_decal_pixmaps(GkrellmPanel *p, gboolean top_layer)
 			{
 			gdk_gc_set_clip_mask(_GK.draw3_GC, d->stencil);
 			gdk_gc_set_clip_origin(_GK.draw3_GC, d->x, d->y);
+			// TODO: replacing with gkrellm_draw_drawable destroys mail pixmap
 			gdk_draw_drawable(p->pixmap, _GK.draw3_GC, d->pixmap,
 						0, d->y_src, d->x, d->y, d->w, d->h);
 			restore_gc = TRUE;
@@ -871,6 +873,7 @@ push_krell_pixmaps(GkrellmPanel *p)
 			restore_clip_origin = TRUE;
 			}
 		dr = &k->draw;
+		// TODO: migration to gkrellm_draw_drawable breaks mail pixmap
 		gdk_draw_drawable(p->pixmap, _GK.text_GC, k->pixmap,
 					dr->x_src, dr->y_src, dr->x_dst, dr->y_dst, dr->w, dr->h);
 		restore_clip_mask = TRUE;
@@ -894,7 +897,7 @@ gkrellm_draw_panel_layers(GkrellmPanel *p)
 
 	if (p->need_decal_overlap_check)
 		{
-		gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC,
+		gkrellm_draw_drawable(p->bg_text_layer_pixmap,
 					p->bg_pixmap,
 					0, 0,  0, 0,  p->w, p->h);
 		for (list = p->decal_list; list; list = list->next)
@@ -937,7 +940,7 @@ gkrellm_draw_panel_layers(GkrellmPanel *p)
 	*/
 	if (p->modified)
 		{
-		gdk_draw_drawable(p->pixmap, _GK.draw1_GC, p->bg_text_layer_pixmap,
+		gkrellm_draw_drawable(p->pixmap, p->bg_text_layer_pixmap,
 					0, 0,  0, 0,  p->w, p->h);
 
 		do_top_layer_decals = push_decal_pixmaps(p, FALSE);
@@ -948,7 +951,7 @@ gkrellm_draw_panel_layers(GkrellmPanel *p)
 			push_decal_pixmaps(p, TRUE);
 
 		if (gtk_widget_get_window(p->drawing_area))
-			gdk_draw_drawable(gtk_widget_get_window(p->drawing_area), _GK.draw1_GC, p->pixmap,
+			gkrellm_draw_drawable(gtk_widget_get_window(p->drawing_area), p->pixmap,
 						0, 0,   0, 0,   p->w, p->h);
 		}
 	p->modified = FALSE;
