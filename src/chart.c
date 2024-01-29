@@ -110,12 +110,12 @@ gkrellm_clear_chart(GkrellmChart *cp)
 	{
 	if (!cp)
 		return;
-	gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cp->bg_src_pixmap,
+	gkrellm_draw_drawable(cp->pixmap, cp->bg_src_pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
-	gdk_draw_drawable(cp->bg_pixmap, _GK.draw1_GC, cp->bg_src_pixmap,
+	gkrellm_draw_drawable(cp->bg_pixmap, cp->bg_src_pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
 	if (gtk_widget_get_window(cp->drawing_area))
-		gdk_draw_drawable(gtk_widget_get_window(cp->drawing_area), _GK.draw1_GC, cp->pixmap,
+		gkrellm_draw_drawable(gtk_widget_get_window(cp->drawing_area), cp->pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
 	}
 
@@ -124,9 +124,9 @@ gkrellm_clear_chart_pixmap(GkrellmChart *cp)
 	{
 	if (!cp)
 		return;
-	gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cp->bg_src_pixmap,
+	gkrellm_draw_drawable(cp->pixmap, cp->bg_src_pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
-	gdk_draw_drawable(cp->bg_pixmap, _GK.draw1_GC, cp->bg_src_pixmap,
+	gkrellm_draw_drawable(cp->bg_pixmap, cp->bg_src_pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
 	}
 
@@ -136,7 +136,7 @@ gkrellm_clean_bg_src_pixmap(GkrellmChart *cp)
 	if (!cp)
 		return;
 	if (!gkrellm_winop_draw_rootpixmap_onto_transparent_chart(cp))
-		gdk_draw_drawable(cp->bg_src_pixmap, _GK.draw1_GC,
+		gkrellm_draw_drawable(cp->bg_src_pixmap,
 				cp->bg_clean_pixmap, 0, 0, 0, 0, cp->w, cp->h);
 	cp->bg_sequence_id += 1;
 	}
@@ -149,7 +149,7 @@ gkrellm_draw_chart_grid_line(GkrellmChart *cp, GdkPixmap *pixmap, gint y)
 	if (!cp)
 		return;
 	gdk_drawable_get_size(cp->bg_grid_pixmap, NULL, &h);
-	gdk_draw_drawable(pixmap, _GK.draw1_GC,
+	gkrellm_draw_drawable(pixmap,
 				cp->bg_grid_pixmap, 0, 0, cp->x, y, cp->w, h);
 	}
 
@@ -159,7 +159,7 @@ gkrellm_draw_chart_to_screen(GkrellmChart *cp)
 	/* Draw the expose pixmap onto the screen.
 	*/
 	if (cp && gtk_widget_get_window(cp->drawing_area))
-		gdk_draw_drawable(gtk_widget_get_window(cp->drawing_area), _GK.draw1_GC, cp->pixmap,
+		gkrellm_draw_drawable(gtk_widget_get_window(cp->drawing_area), cp->pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
 	}
 
@@ -313,7 +313,7 @@ draw_layer_grid_lines(GkrellmChart *cp)
 	gint			active_split, current_split;
 	gboolean		do_next_split, done_once_per_split, tmp;
 
-	gdk_draw_drawable(cp->bg_pixmap, _GK.draw1_GC,
+	gkrellm_draw_drawable(cp->bg_pixmap,
 				cp->bg_src_pixmap, 0, 0,  0, 0,  cp->w, cp->h);
 	do_next_split = TRUE;
 	for (active_split = 0; do_next_split; ++active_split)
@@ -333,7 +333,7 @@ draw_layer_grid_lines(GkrellmChart *cp)
 					do_next_split = TRUE;
 				continue;
 				}
-			gdk_draw_drawable(cd->layer.pixmap, _GK.draw1_GC,
+			gkrellm_draw_drawable(cd->layer.pixmap,
 					*(cd->layer.src_pixmap), 0, 0,  0, 0,  cp->w, cp->h);
 
 			grid_res = cp->config->grid_resolution;
@@ -351,12 +351,13 @@ draw_layer_grid_lines(GkrellmChart *cp)
 					y0 = chartdata_ycoord(cp, cd, y);
 					cd->inverted = tmp;
 					gdk_drawable_get_size(cd->layer.grid_pixmap, NULL, &h);
-					gdk_draw_drawable(cd->layer.pixmap, _GK.draw1_GC,
+					gkrellm_draw_drawable(cd->layer.pixmap,
 						cd->layer.grid_pixmap, 0, 0, cp->x, y0, cp->w, h);
 
 					if (!done_once_per_split)
 						{
 						gdk_drawable_get_size(cp->bg_grid_pixmap, NULL, &h);
+						// TODO: grid lines get lost with cairo
 						gdk_draw_drawable(cp->bg_pixmap, _GK.draw1_GC,
 							cp->bg_grid_pixmap, 0, 0, cp->x, y0, cp->w, h);
 						}
@@ -368,7 +369,7 @@ draw_layer_grid_lines(GkrellmChart *cp)
 				y -= GRID_HEIGHT_Y_OFFSET_ADJUST(cp);
 				if (y >= 0)
 					{
-					gdk_draw_drawable(cp->bg_pixmap, _GK.draw1_GC,
+					gkrellm_draw_drawable(cp->bg_pixmap,
 							_GK.bg_separator_pixmap,
 							0, 0, cp->x, Y_SCREEN_MAP(cp, y),
 							cp->w, _GK.bg_separator_height);
@@ -454,6 +455,7 @@ draw_chartdata_impulses(GkrellmChart *cp, GList *cd_list,
 			y0 = chartdata_ycoord(cp, cd, 0);
 			y1 = chartdata_ycoord(cp, cd, cd->maxval);
 			gdk_gc_set_clip_mask(_GK.draw1_GC, cd->data_bitmap);
+			// TODO: cairo breaks drawing background
 			if (cd->inverted)
 				gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cd->layer.pixmap,
 						0, y0,  0, y0,  cp->w, y1 - y0 + 1);
@@ -521,6 +523,7 @@ draw_chartdata_lines(GkrellmChart *cp, GkrellmChartdata *cd, gint i0)
 		y0 = chartdata_ycoord(cp, cd, 0);
 		y1 = chartdata_ycoord(cp, cd, cd->maxval);
 		gdk_gc_set_clip_mask(_GK.draw1_GC, cd->data_bitmap);
+		// TODO: cairo breaks drawing background
 		if (cd->inverted)
 			gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cd->layer.pixmap,
 					0, y0,  0, y0,  cp->w, y1 - y0 + 1);
@@ -646,7 +649,7 @@ gkrellm_draw_chartdata(GkrellmChart *cp)
 	if (!cp)
 		return;
 	i0 = setup_chart_scalemax(cp);
-	gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cp->bg_pixmap,
+	gkrellm_draw_drawable(cp->pixmap, cp->bg_pixmap,
 						0, 0,	0, 0,   cp->w, cp->h);
 
 	current_split = active_split = 0;
@@ -720,6 +723,7 @@ scroll_chartdata_bitmaps(GkrellmChart *cp)
 		cd = (GkrellmChartdata *) list->data;
 		if (cd->hide)
 			continue;
+		// TODO: cairo breaks chart scrolling
 		gdk_draw_drawable(cd->data_bitmap, _GK.bit1_GC, cd->data_bitmap,
 						1, 0, 0, 0, cp->w - 1, cp->h);
 		}
@@ -1192,6 +1196,7 @@ gkrellm_draw_chart_text(GkrellmChart *cp, gint style_id, gchar *str)
 						text_length);
 			else /* Default text draw effect is fill solid and can use cache */
 				{
+				// TODO: cairo breaks text effect / text background
 				if (!tr->cache_valid)
 					{
 					if (_GK.debug_level & DEBUG_CHART_TEXT)
@@ -1232,7 +1237,7 @@ gkrellm_draw_chart_label(GkrellmChart *cp, GkrellmTextstyle *ts,
 
 	gkrellm_text_extents(ts->font, s, strlen(s), &w, &h, NULL, &y_ink);
 
-	gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cp->bg_pixmap,
+	gkrellm_draw_drawable(cp->pixmap, cp->bg_pixmap,
 				x, y, x, y, w + ts->effect, h + ts->effect);
     gkrellm_draw_string(cp->pixmap, ts, x, y - y_ink, s);
 
