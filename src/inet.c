@@ -358,7 +358,7 @@ static void
 draw_inet_mark_data(InetMon *in, gint minute_mark)
 	{
 	GkrellmChart	*cp;
-	GdkGC			*gc1, *gc2, *gc3;
+	cairo_t			*gc1, *gc2, *gc3;
 	gint			hits, x, y, n;
 
 	cp = in->chart;
@@ -379,7 +379,7 @@ draw_inet_mark_data(InetMon *in, gint minute_mark)
 	/* Clear out the area and redraw the marks.
 	*/
 	y = cp->h - cp->y;
-	gdk_draw_drawable(cp->pixmap, gc1, cp->bg_src_pixmap,
+	gkrellm_draw_drawable(cp->pixmap, cp->bg_src_pixmap,
 			0, y,  0, y,  cp->w, cp->y);
 	gdk_gc_set_foreground(gc1, gkrellm_out_color());
 	gdk_gc_set_foreground(gc2, gkrellm_in_color());
@@ -394,7 +394,7 @@ draw_inet_mark_data(InetMon *in, gint minute_mark)
 			gdk_draw_line(cp->pixmap, gc3,
 						cp->x + n, cp->h - 1, cp->x + n, y);
 		}
-	gdk_draw_drawable(gtk_widget_get_window(cp->drawing_area), gc1, cp->pixmap,
+	gkrellm_draw_drawable(gtk_widget_get_window(cp->drawing_area), cp->pixmap,
 			0, y,  0, y,  cp->w, cp->y);
 	}
 
@@ -402,7 +402,7 @@ static void
 draw_inet_chart(InetMon *in)
 	{
 	struct tm			tm;
-	GdkGC				*gc3;
+	cairo_t				*gc3;
 	GkrellmChart		*cp;
 	GkrellmTextstyle	*ts;
 	GdkColor			tmp_color;
@@ -772,9 +772,9 @@ inet_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 			pixmap = in->chart_hour->pixmap;
 		if (pixmap)
 			{
-			gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), pixmap,
+			gkrellm_draw_drawable_ev(gtk_widget_get_window(widget), pixmap,
 					ev->area.x, ev->area.y, ev->area.x, ev->area.y,
-					ev->area.width, ev->area.height);
+					&(ev->area));
 			break;
 			}
 		}

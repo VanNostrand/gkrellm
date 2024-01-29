@@ -268,13 +268,13 @@ struct	GkrellmConfig
 				decal_mail_delay;
 
 
-	GdkGC		*draw1_GC,
+	cairo_t		*draw1_GC,
 				*draw2_GC,
 				*draw3_GC,
 				*draw_stencil_GC,
 				*text_GC;
 
-	GdkGC		*bit1_GC,		/* Depth 1 GCs		*/
+	cairo_t		*bit1_GC,		/* Depth 1 GCs		*/
 				*bit0_GC;
 
 	PangoFontDescription

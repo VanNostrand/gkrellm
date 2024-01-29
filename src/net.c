@@ -1127,7 +1127,7 @@ net_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 				break;
 			}
 	if (pixmap)
-		gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), pixmap,
+		gkrellm_draw_drawable(gtk_widget_get_window(widget), pixmap,
 			ev->area.x, ev->area.y, ev->area.x, ev->area.y,
 			ev->area.width, ev->area.height);
 	return FALSE;
@@ -2090,7 +2090,7 @@ create_net_timer(GtkWidget *vbox, gint first_create)
 		y = time_decal->y - tb->top;
 		gkrellm_paste_piximage(bg_timer_piximage, p->pixmap, x, y, w, h);
 		gkrellm_paste_piximage(bg_timer_piximage, p->bg_pixmap, x, y, w, h);
-		gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC, p->bg_pixmap,
+		gkrellm_draw_drawable(p->bg_text_layer_pixmap, p->bg_pixmap,
                 0, 0,  0, 0,  p->w, p->h);
 
 		}

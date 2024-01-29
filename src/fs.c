@@ -918,10 +918,9 @@ fs_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 		fs = (FSmon *) list->data;
 		if (widget == fs->panel->drawing_area)
 			{
-			gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1),
-					fs->panel->pixmap,
+			gkrellm_draw_drawable_ev(gtk_widget_get_window(widget), fs->panel->pixmap,
 					ev->area.x, ev->area.y, ev->area.x, ev->area.y,
-					ev->area.width, ev->area.height);
+					&(ev->area));
 			break;
 			}
 		}

@@ -91,9 +91,8 @@ host_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 	{
 	if (widget == host->drawing_area)
 		{
-		gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), host->pixmap,
-			ev->area.x, ev->area.y, ev->area.x, ev->area.y,
-			ev->area.width, ev->area.height);
+		gkrellm_draw_drawable_ev(gtk_widget_get_window(widget), host->pixmap,
+		ev->area.x, ev->area.y, ev->area.x, ev->area.y,	&(ev->area));
 		}
 	return FALSE;
 	}

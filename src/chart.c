@@ -268,7 +268,7 @@ gkrellm_set_chartdata_flags(GkrellmChartdata *cd, gint flags)
 	}
 
 static void
-gk_draw_vertical_line(GdkDrawable *drawable, GdkGC *gc, gint x, gint y1, gint y2)
+gk_draw_vertical_line(GdkDrawable *drawable, cairo_t *gc, gint x, gint y1, gint y2)
 	{
 	if (y1 == y2)
 		gdk_draw_point(drawable, gc, x, y1);

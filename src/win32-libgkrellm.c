@@ -1065,11 +1065,11 @@ GdkBitmap	*gkrellm_decal_misc_mask(void)
 
   /* Accessing other data from the GK struct
   */
-GdkGC		*gkrellm_draw_GC(gint a)
+cairo_t		*gkrellm_draw_GC(gint a)
 {
     return (*(callbacks->gkrellm_draw_GC))(a);
 }
-GdkGC		*gkrellm_bit_GC(gint a)
+cairo_t		*gkrellm_bit_GC(gint a)
 {
     return (*(callbacks->gkrellm_bit_GC))(a);
 }
@@ -1485,9 +1485,9 @@ void    gkrellm_text_extents(PangoFontDescription *font_desc, gchar *text, gint 
 
 gint    gkrellm_gdk_string_width(PangoFontDescription *d, gchar *text)
   {return callbacks->gkrellm_gdk_string_width(d, text);}
-void    gkrellm_gdk_draw_string(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string)
+void    gkrellm_gdk_draw_string(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string)
   {callbacks->gkrellm_gdk_draw_string(drawable, font, gc, x, y, string);}
-void    gkrellm_gdk_draw_text(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string, gint len)
+void    gkrellm_gdk_draw_text(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string, gint len)
   {callbacks->gkrellm_gdk_draw_text(drawable, font, gc, x, y, string, len);}
 
 gboolean  gkrellm_client_mode(void)
@@ -1541,9 +1541,9 @@ gint          gkrellm_gdk_string_markup_width(PangoFontDescription *d, gchar *s)
   {return callbacks->gkrellm_gdk_string_markup_width(d,s);}
 gint          gkrellm_gdk_text_markup_width(PangoFontDescription *font_desc, const gchar *string, gint len)
   {return callbacks->gkrellm_gdk_text_markup_width(font_desc, string, len);}
-void          gkrellm_gdk_draw_string_markup(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string)
+void          gkrellm_gdk_draw_string_markup(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string)
   {callbacks->gkrellm_gdk_draw_string_markup(drawable, font, gc, x, y, string);}
-void          gkrellm_gdk_draw_text_markup(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string, gint len)
+void          gkrellm_gdk_draw_text_markup(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string, gint len)
   {callbacks->gkrellm_gdk_draw_text_markup(drawable, font, gc, x, y, string, len);}
 
 //---------------------------------------------------------------------------

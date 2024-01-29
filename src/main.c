@@ -707,22 +707,22 @@ apply_frame_transparency(gboolean force)
 	if (monitors_visible)
 		{
 		if (gtree.frame_top_mask)
-			gdk_draw_drawable(gtree.window_transparency_mask, _GK.bit1_GC,
+			gkrellm_draw_drawable(gtree.window_transparency_mask,
 				gtree.frame_top_mask, 0, 0,  0, 0,  w, _GK.frame_top_height);
 		if (gtree.frame_bottom_mask)
-			gdk_draw_drawable(gtree.window_transparency_mask, _GK.bit1_GC,
+			gkrellm_draw_drawable(gtree.window_transparency_mask,
 				gtree.frame_bottom_mask,
 				0, 0, 0, h - _GK.frame_bottom_height,
 				w, _GK.frame_bottom_height);
 
 		if (gtree.frame_left_mask)
-			gdk_draw_drawable(gtree.window_transparency_mask, _GK.bit1_GC,
+			gkrellm_draw_drawable(gtree.window_transparency_mask,
 				gtree.frame_left_mask,
 				0, 0,  0, _GK.frame_top_height,
 				_GK.frame_left_width, _GK.monitor_height);
 
 		if (gtree.frame_right_mask)
-			gdk_draw_drawable(gtree.window_transparency_mask, _GK.bit1_GC,
+			gkrellm_draw_drawable(gtree.window_transparency_mask,
 				gtree.frame_right_mask,
 				0, 0,  w - _GK.frame_right_width, _GK.frame_top_height,
 				_GK.frame_right_width, _GK.monitor_height);
@@ -730,13 +730,13 @@ apply_frame_transparency(gboolean force)
 	else	/* Top and bottom frames are not visible and GKrellM is shut */
 		{
 		if (gtree.frame_left_mask)
-			gdk_draw_drawable(gtree.window_transparency_mask, _GK.bit1_GC,
+			gkrellm_draw_drawable(gtree.window_transparency_mask,
 				gtree.frame_left_mask,
 				0, 0,  0, 0,
 				_GK.frame_left_width, _GK.monitor_height);
 
 		if (gtree.frame_right_mask)
-			gdk_draw_drawable(gtree.window_transparency_mask, _GK.bit1_GC,
+			gkrellm_draw_drawable(gtree.window_transparency_mask,
 				gtree.frame_right_mask,
 				0, 0,  _GK.frame_left_width, 0,
 				_GK.frame_right_width, _GK.monitor_height);
@@ -909,13 +909,13 @@ draw_cap(GkrellmPiximage *piximage, gint y_mon, gint h_mon, gint h_spacer,
 
 	x_dst = left ? 0 : _GK.frame_right_width - w_pix;
 	gkrellm_scale_piximage_to_pixmap(piximage, &pixmap, &mask, w_pix, h_pix);
-	gdk_draw_drawable(
+	gkrellm_draw_drawable(
 				left ? gtree.frame_left_pixmap : gtree.frame_right_pixmap,
-				_GK.draw1_GC, pixmap, 0, 0, x_dst, y, w_pix, h_cap);
+				pixmap, 0, 0, x_dst, y, w_pix, h_cap);
 
 	frame_mask = left ? gtree.frame_left_mask : gtree.frame_right_mask;
 	if (mask && frame_mask)
-		gdk_draw_drawable(frame_mask, _GK.bit1_GC, mask,
+		gkrellm_draw_drawable(frame_mask, mask,
 				0, 0, x_dst, y, w_pix, h_cap);
 	else if (mask || frame_mask)
 		frame_transparency_warning();
@@ -993,11 +993,11 @@ draw_left_frame_overlap(GdkPixbuf *pixbuf, GkrellmBorder *border,
 	gkrellm_scale_piximage_to_pixmap(&piximage, &pixmap, &mask,
 						overlap, height);
 	g_object_unref(G_OBJECT(piximage.pixbuf));
-	gdk_draw_drawable(gtree.frame_left_pixmap, _GK.draw1_GC, pixmap,
+	gkrellm_draw_drawable(gtree.frame_left_pixmap, pixmap,
 					0, 0, _GK.frame_left_width - overlap, y_frame,
 					overlap, height);
 	if (mask && gtree.frame_left_mask)
-		gdk_draw_drawable(gtree.frame_left_mask, _GK.bit1_GC, mask,
+		gkrellm_draw_drawable(gtree.frame_left_mask, mask,
 					0, 0, _GK.frame_left_width - overlap, y_frame,
 					overlap, height);
 	else if (mask || gtree.frame_left_mask)
@@ -1026,10 +1026,10 @@ draw_right_frame_overlap(GdkPixbuf *pixbuf, GkrellmBorder *border,
 	gkrellm_scale_piximage_to_pixmap(&piximage, &pixmap, &mask,
 					overlap, height);
 	g_object_unref(G_OBJECT(piximage.pixbuf));
-	gdk_draw_drawable(gtree.frame_right_pixmap, _GK.draw1_GC, pixmap,
+	gkrellm_draw_drawable(gtree.frame_right_pixmap, pixmap,
 					0, 0, 0, y_frame, overlap, height);
 	if (mask && gtree.frame_right_mask)
-		gdk_draw_drawable(gtree.frame_right_mask, _GK.bit1_GC, mask,
+		gkrellm_draw_drawable(gtree.frame_right_mask, mask,
 					0, 0, 0, y_frame, overlap, height);
 	else if (mask || gtree.frame_right_mask)
 		frame_transparency_warning();

@@ -544,9 +544,9 @@ meminfo_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 	else if (swap_chart.chart && widget == swap_chart.chart->drawing_area)
 		pixmap = swap_chart.chart->pixmap;
 	if (pixmap)
-		gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), pixmap,
+		gkrellm_draw_drawable_ev(gtk_widget_get_window(widget), pixmap,
 				ev->area.x, ev->area.y, ev->area.x, ev->area.y,
-				ev->area.width, ev->area.height);
+				&(ev->area));
 	return FALSE;
 	}
 

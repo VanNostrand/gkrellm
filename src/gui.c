@@ -722,6 +722,46 @@ gkrellm_gtk_category_vbox(GtkWidget *box, gchar *category_header,
 	return vbox1;
 	}
 
+/* wrap around the legacy function gdk_draw_drawable() that was used a lot.
+ * window is usually a widget, pixmap the picture that is drawn to the widget,
+ * then x/y coordinates of source, destination and the (sub)size of the picture.
+ */
+void
+gkrellm_draw_drawable(GdkWindow *window, GdkPixmap *pixmap, gint xsrc, gint ysrc,
+		gint xdest, gint ydest, gint width, gint height)
+	{
+	/* TODO: gdk_cairo_create: Deprecated since: 3.22, use
+	 * GdkDrawingContext* ctx = gdk_window_begin_draw_frame(window, cairo_region_t *region);
+	 * cairo_t* cr = gdk_drawing_context_get_cairo_context(ctx);
+	*/
+	cairo_t *cr = gdk_cairo_create (window);
+	gdk_cairo_set_source_pixmap(cr, pixmap, xdest, ydest);
+	GdkRectangle rectangle;
+	rectangle.x = xsrc;
+	rectangle.y = ysrc;
+	rectangle.width = width;
+	rectangle.height =height ;
+	gdk_cairo_rectangle (cr, &rectangle);
+	cairo_fill(cr);
+	cairo_destroy (cr);
+	}
+
+/* second wrapper around the legacy function gdk_draw_drawable().
+ * This is intended to be used with functions that use GdkEventExpose pointers,
+ * as they contain a GdkRectangle instead of explicit x/y/width/height parameters.
+ */
+void
+gkrellm_draw_drawable_ev(GdkWindow *window, GdkPixmap *pixmap, gint xsrc, gint ysrc,
+		gint xdest, gint ydest, const GdkRectangle *area)
+	{
+	cairo_t *cr = gdk_cairo_create (window);
+	gdk_cairo_set_source_pixmap(cr, pixmap, xdest, ydest);
+	gdk_cairo_rectangle (cr, area);
+	cairo_fill(cr);
+	cairo_destroy (cr);
+	}
+
+
 GtkWidget *
 gkrellm_gtk_notebook_page(GtkWidget *tabs, char *name)
 	{

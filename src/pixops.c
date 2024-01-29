@@ -76,7 +76,7 @@ gkrellm_clone_pixmap(GdkPixmap **dest, GdkPixmap **src)
 	if (!*dest)
 		*dest = gdk_pixmap_new(gtk_widget_get_window(gkrellm_get_top_window()),
 					w_src, h_src, -1);
-	gdk_draw_drawable(*dest, _GK.draw1_GC, *src, 0, 0, 0, 0, w_src, h_src);
+	gkrellm_draw_drawable(*dest, *src, 0, 0, 0, 0, w_src, h_src);
 	return TRUE;	
 	}
 
@@ -102,7 +102,7 @@ gkrellm_clone_bitmap(GdkBitmap **dest, GdkBitmap **src)
 	if (!*dest)
 		*dest = gdk_pixmap_new(gtk_widget_get_window(gkrellm_get_top_window()),
 					w_src, h_src, 1);
-	gdk_draw_drawable(*dest, _GK.bit1_GC, *src, 0, 0, 0, 0, w_src, h_src);
+	gkrellm_draw_drawable(*dest, *src, 0, 0, 0, 0, w_src, h_src);
 	return TRUE;	
 	}
 

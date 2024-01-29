@@ -428,7 +428,7 @@ gkrellm_text_markup_extents(PangoFontDescription *font_desc, gchar *text,
 
 void
 gkrellm_gdk_draw_string(GdkDrawable *drawable, PangoFontDescription *font_desc,
-			GdkGC *gc, gint x, gint y, gchar *string)
+			cairo_t *gc, gint x, gint y, gchar *string)
 	{
 	PangoLayout	*layout;
 
@@ -442,7 +442,7 @@ gkrellm_gdk_draw_string(GdkDrawable *drawable, PangoFontDescription *font_desc,
 void
 gkrellm_gdk_draw_string_markup(GdkDrawable *drawable,
 			PangoFontDescription *font_desc,
-			GdkGC *gc, gint x, gint y, gchar *string)
+			cairo_t *gc, gint x, gint y, gchar *string)
 	{
 	PangoLayout	*layout;
 
@@ -455,7 +455,7 @@ gkrellm_gdk_draw_string_markup(GdkDrawable *drawable,
 
 void
 gkrellm_gdk_draw_text(GdkDrawable *drawable, PangoFontDescription *font_desc,
-			GdkGC *gc, gint x, gint y, gchar *string, gint len)
+			cairo_t *gc, gint x, gint y, gchar *string, gint len)
 	{
 	PangoLayout	*layout;
 
@@ -470,7 +470,7 @@ gkrellm_gdk_draw_text(GdkDrawable *drawable, PangoFontDescription *font_desc,
 void
 gkrellm_gdk_draw_text_markup(GdkDrawable *drawable,
 			PangoFontDescription *font_desc,
-			GdkGC *gc, gint x, gint y, gchar *string, gint len)
+			cairo_t *gc, gint x, gint y, gchar *string, gint len)
 	{
 	PangoLayout	*layout;
 

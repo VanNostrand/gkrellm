@@ -364,8 +364,8 @@ typedef struct
 
       /* Accessing other data from the GK struct
       */
-    GdkGC		*(*gkrellm_draw_GC)(gint);
-    GdkGC		*(*gkrellm_bit_GC)(gint);
+    cairo_t		*(*gkrellm_draw_GC)(gint);
+    cairo_t		*(*gkrellm_bit_GC)(gint);
     PangoFontDescription		*(*gkrellm_default_font)(gint);
     GdkColor	*(*gkrellm_white_color)(void);
     GdkColor	*(*gkrellm_black_color)(void);
@@ -539,8 +539,8 @@ typedef struct
   void    (*gkrellm_text_extents)(PangoFontDescription *font_desc, gchar *text, gint len, gint *width, gint *height, gint *baseline, gint *y_ink);
 
   gint    (*gkrellm_gdk_string_width)(PangoFontDescription *, gchar *);
-  void    (*gkrellm_gdk_draw_string)(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string);
-  void    (*gkrellm_gdk_draw_text)(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string, gint len);
+  void    (*gkrellm_gdk_draw_string)(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string);
+  void    (*gkrellm_gdk_draw_text)(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string, gint len);
 
   gboolean  (*gkrellm_client_mode)(void);
   void      (*gkrellm_client_plugin_get_setup)(gchar *key_name, void (*setup_func_cb)(gchar *str));
@@ -576,8 +576,8 @@ typedef struct
   void          (*gkrellm_text_markup_extents)(PangoFontDescription *font_desc, gchar *text, gint len, gint *width, gint *height, gint *baseline, gint *y_ink);
   gint          (*gkrellm_gdk_string_markup_width)(PangoFontDescription *, gchar *);
   gint          (*gkrellm_gdk_text_markup_width)(PangoFontDescription *font_desc, const gchar *string, gint len);
-  void          (*gkrellm_gdk_draw_string_markup)(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string);
-  void          (*gkrellm_gdk_draw_text_markup)(GdkDrawable *drawable, PangoFontDescription *font, GdkGC *gc, gint x, gint y, gchar *string, gint len);
+  void          (*gkrellm_gdk_draw_string_markup)(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string);
+  void          (*gkrellm_gdk_draw_text_markup)(GdkDrawable *drawable, PangoFontDescription *font, cairo_t *gc, gint x, gint y, gchar *string, gint len);
 
   //---------------------------------------------------------------------------
   // new since 2.3.2

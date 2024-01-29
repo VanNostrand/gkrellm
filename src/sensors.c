@@ -926,7 +926,7 @@ draw_bezels(GkrellmPanel *p, GList *smon_list, gint w, gint h, gint x_adjust)
 		gkrellm_paste_piximage(bezel_piximage, p->pixmap,
 				x - b->left, dv->y - b->top, w, h);
 		}
-	gdk_draw_drawable(p->bg_text_layer_pixmap, _GK.draw1_GC, p->bg_pixmap,
+	gkrellm_draw_drawable(p->bg_text_layer_pixmap, p->bg_pixmap,
 				0, 0,  0, 0,  p->w, p->h);
 	}
 
@@ -1291,9 +1291,9 @@ update_sensors(void)
 static gint
 expose_event(GtkWidget *widget, GdkEventExpose *ev, GkrellmPanel *p)
 	{
-	gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), p->pixmap,
+	gkrellm_draw_drawable_ev(gtk_widget_get_window(widget), p->pixmap,
 				ev->area.x, ev->area.y, ev->area.x, ev->area.y,
-				ev->area.width, ev->area.height);
+				&(ev->area));
 	return FALSE;
 	}
 

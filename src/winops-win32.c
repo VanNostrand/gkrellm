@@ -37,7 +37,7 @@
 #include "gkrellm-private.h"
 #include <gdk/gdkwin32.h>
 
-static GdkGC	*trans_gc  = NULL;
+static cairo_t	*trans_gc  = NULL;
 static GdkColor trans_color;
 
 

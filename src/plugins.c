@@ -410,10 +410,10 @@ gkrellm_krell_mini_style(void)
 	return _GK.krell_mini_style;
 	}
 
-GdkGC *
+cairo_t *
 gkrellm_draw_GC(gint n)
 	{
-	GdkGC	*gc;
+	cairo_t	*gc;
 
 	if (n == 0)
 		return _GK.draw_stencil_GC;
@@ -426,7 +426,7 @@ gkrellm_draw_GC(gint n)
 	return gc;
 	}
 
-GdkGC *
+cairo_t *
 gkrellm_bit_GC(gint n)
 	{
 	if (n == 0)

@@ -53,7 +53,7 @@
 
 
 static Pixmap	root_xpixmap	= None;
-static GdkGC	*trans_gc;
+static cairo_t	*trans_gc;
 
 static gchar 	*client_id;
 

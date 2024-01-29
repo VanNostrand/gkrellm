@@ -2560,9 +2560,8 @@ static gint
 mail_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 	{
 	if (widget == mail->drawing_area)
-		gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), mail->pixmap,
-			ev->area.x, ev->area.y, ev->area.x, ev->area.y,
-			ev->area.width, ev->area.height);
+		gkrellm_draw_drawable_ev(gtk_widget_get_window(widget), mail->pixmap,
+			ev->area.x, ev->area.y, ev->area.x, ev->area.y, &(ev->area));
 	return FALSE;
 	}
 

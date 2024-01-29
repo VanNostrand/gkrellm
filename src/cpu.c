@@ -538,7 +538,7 @@ cpu_expose_event(GtkWidget *widget, GdkEventExpose *ev)
 			pixmap = cp->panel->pixmap;
 		if (pixmap)
 			{
-			gdk_draw_drawable(gtk_widget_get_window(widget), gkrellm_draw_GC(1), pixmap,
+			gkrellm_draw_drawable(gtk_widget_get_window(widget), pixmap,
 					ev->area.x, ev->area.y, ev->area.x, ev->area.y,
 					ev->area.width, ev->area.height);
 			break;

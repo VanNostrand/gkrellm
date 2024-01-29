@@ -476,8 +476,8 @@ GdkBitmap	*gkrellm_decal_misc_mask(void);
 
   /* Accessing other data from the GK struct
   */
-GdkGC		*gkrellm_draw_GC(gint);
-GdkGC		*gkrellm_bit_GC(gint);
+cairo_t		*gkrellm_draw_GC(gint);
+cairo_t		*gkrellm_bit_GC(gint);
 PangoFontDescription *gkrellm_default_font(gint);
 GdkColor	*gkrellm_white_color(void);
 GdkColor	*gkrellm_black_color(void);
@@ -504,6 +504,10 @@ gchar		*gkrellm_plugin_get_exported_label(GkrellmMonitor *mon,
   /* Wrappers around gtk widget functions to provide a convenience higher level
   |  interface for creating the config pages.
   */
+void		gkrellm_draw_drawable(GdkWindow *window, GdkPixmap *pixmap, gint xsrc, gint ysrc,
+				                 gint xdest, gint ydest, gint width, gint height);
+void		gkrellm_draw_drawable_ev(GdkWindow *window, GdkPixmap *pixmap, gint xsrc, gint ysrc,
+						gint xdest, gint ydest, const GdkRectangle *area);
 GtkWidget	*gkrellm_gtk_notebook_page(GtkWidget *, gchar *);
 GtkWidget	*gkrellm_gtk_framed_notebook_page(GtkWidget *, char *);
 GtkWidget	*gkrellm_gtk_launcher_table_new(GtkWidget *, gint);
@@ -619,13 +623,13 @@ gint	gkrellm_gdk_text_markup_width(PangoFontDescription *font_desc,
 					const gchar *string, gint len);
 void	gkrellm_gdk_draw_string(GdkDrawable *drawable,
 					PangoFontDescription *font,
-					GdkGC *gc, gint x, gint y, gchar *string);
+					cairo_t *gc, gint x, gint y, gchar *string);
 void	gkrellm_gdk_draw_string_markup(GdkDrawable *drawable,
 					PangoFontDescription *font,
-					GdkGC *gc, gint x, gint y, gchar *string);
+					cairo_t *gc, gint x, gint y, gchar *string);
 void	gkrellm_gdk_draw_text(GdkDrawable *drawable,
 					PangoFontDescription *font,
-					GdkGC *gc, gint x, gint y, gchar *string, gint len);
+					cairo_t *gc, gint x, gint y, gchar *string, gint len);
 void	gkrellm_gdk_draw_text_markup(GdkDrawable *drawable,
 					PangoFontDescription *font,
-					GdkGC *gc, gint x, gint y, gchar *string, gint len);
+					cairo_t *gc, gint x, gint y, gchar *string, gint len);
