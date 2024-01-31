@@ -730,6 +730,15 @@ void
 gkrellm_draw_drawable(GdkWindow *window, GdkPixmap *pixmap, gint xsrc, gint ysrc,
 		gint xdest, gint ydest, gint width, gint height)
 	{
+	/* 	The destination is the surface on which you're drawing.
+		The source is the "paint" to work with. It can be a pattern or a
+		previously created destination surface.
+		Here, the pixmap is the source.
+		The context keeps track of source, destination, and mask.
+		It also tracks several helper variables like your line width and style,
+		your font face and size, and the path, which is turned into a mask by
+		drawing verbs.
+	*/
 	/* TODO: gdk_cairo_create: Deprecated since: 3.22, use
 	 * GdkDrawingContext* ctx = gdk_window_begin_draw_frame(window, cairo_region_t *region);
 	 * cairo_t* cr = gdk_drawing_context_get_cairo_context(ctx);
