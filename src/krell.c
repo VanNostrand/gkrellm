@@ -203,7 +203,7 @@ gkrellm_draw_decal_on_chart(GkrellmChart *cp, GkrellmDecal *d,
 		r = &d->ink;
 		if (d->modified || d->chart_sequence_id != cp->bg_sequence_id)
 			{
-			gdk_draw_drawable(cp->bg_text_pixmap, _GK.draw1_GC, cp->bg_pixmap,
+			gkrellm_draw_drawable(cp->bg_text_pixmap, cp->bg_pixmap,
 						d->x, d->y, d->x, d->y, d->w, d->h);
 			layout = gtk_widget_create_pango_layout(
 						gkrellm_get_top_window(), NULL);
@@ -252,7 +252,7 @@ gkrellm_draw_decal_on_chart(GkrellmChart *cp, GkrellmDecal *d,
 			d->chart_sequence_id = cp->bg_sequence_id;
 			d->modified = FALSE;
 			}
-		gdk_draw_drawable(cp->pixmap, _GK.draw1_GC, cp->bg_text_pixmap,
+		gkrellm_draw_drawable(cp->pixmap, cp->bg_text_pixmap,
 					r->x, r->y, r->x, r->y, r->width, r->height);
 		}
 	else
@@ -1767,7 +1767,7 @@ gkrellm_make_overlay_button(GkrellmPanel *p, void (*func)(), void *data,
 	if (normal_piximage && pressed_piximage)
 		{
 		gkrellm_scale_piximage_to_pixmap(normal_piximage, &pm, &m, w, h);
-		gdk_draw_drawable(pixmap, _GK.draw1_GC, pm, 0, 0, 0, 0, w, h);
+		gkrellm_draw_drawable(pixmap, pm, 0, 0, 0, 0, w, h);
 		if (m)
 			gdk_draw_drawable(mask, _GK.bit1_GC, m, 0, 0, 0, 0, w, h);
 		else
@@ -1776,7 +1776,7 @@ gkrellm_make_overlay_button(GkrellmPanel *p, void (*func)(), void *data,
 		gkrellm_free_bitmap(&m);
 
 		gkrellm_scale_piximage_to_pixmap(pressed_piximage, &pm, &m, w, h);
-		gdk_draw_drawable(pixmap, _GK.draw1_GC, pm, 0, 0, 0, h, w, h);
+		gkrellm_draw_drawable(pixmap, pm, 0, 0, 0, h, w, h);
 		if (m)
 			gdk_draw_drawable(mask, _GK.bit1_GC, m, 0, 0, 0, h, w, h);
 		else
