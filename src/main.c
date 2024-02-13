@@ -180,16 +180,10 @@ setup_fonts()
 void
 gkrellm_map_color_string(gchar *color_string, GdkColor *color)
 	{
-	static GdkColormap	*colormap;
-
-	if (colormap == NULL)
-		colormap = gtk_widget_get_colormap(top_window);
-	if (color->red || color->green || color->blue)
-		gdk_colormap_free_colors(colormap, color, 1);
 	if (!color_string)
 		color_string = "black";
+
 	gdk_color_parse(color_string, color);
-	gdk_colormap_alloc_color(colormap, color, FALSE, TRUE);
 	}
 
 static void
@@ -248,6 +242,25 @@ setup_colors()
 		bit_color.pixel = 0;
 		gdk_gc_set_foreground(_GK.bit0_GC, &bit_color);
 		g_object_unref(G_OBJECT(dummy_bitmap));
+/*
+
+		// TODO: use GdkRGBA bit_color; but what is replacing GdkColor.pixel??
+		GdkColor        bit_color;
+		GdkWindow *window = gtk_widget_get_window(top_window);
+		int width = 16;
+		int height = 16;
+
+		cairo_content_t content = cairo_surface_get_content (window);
+
+		_GK.bit0_GC = gdk_window_create_similar_surface (window, content, width, height);
+		bit_color.pixel = 1;
+                gdk_gc_set_foreground(_GK.bit1_GC, &bit_color);
+
+		_GK.bit0_GC = gdk_window_create_similar_surface (window, content, width, height);
+		bit_color.pixel = 0;
+                gdk_gc_set_foreground(_GK.bit0_GC, &bit_color);
+
+*/
 		}
 	}
 

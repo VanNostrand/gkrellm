@@ -1787,13 +1787,9 @@ gkrellm_make_overlay_button(GkrellmPanel *p, void (*func)(), void *data,
 	else	/* Make a default frame. */
 		{
 		GdkColor	gray0, gray1;
-		GdkColormap	*cmap;
 
-		cmap = gdk_colormap_get_system();
 		gdk_color_parse("gray65", &gray0);
 		gdk_color_parse("gray100", &gray1);
-		gdk_colormap_alloc_color(cmap, &gray0, FALSE, TRUE);
-		gdk_colormap_alloc_color(cmap, &gray1, FALSE, TRUE);
 
 		gdk_gc_set_foreground(_GK.draw1_GC, &gray1);
 		gdk_draw_line(pixmap, _GK.draw1_GC, 0, 0, w - 1, 0);		
@@ -1810,9 +1806,6 @@ gkrellm_make_overlay_button(GkrellmPanel *p, void (*func)(), void *data,
 		gdk_draw_rectangle(mask, _GK.bit1_GC, TRUE, 0, 0, w, 2 * h);		
 		gdk_draw_rectangle(mask, _GK.bit0_GC, TRUE, 1, 1, w - 2, h - 2);
 		gdk_draw_rectangle(mask, _GK.bit0_GC, TRUE, 1, h + 1, w - 2, h - 2);
-
-		gdk_colormap_free_colors(cmap, &gray0, 1);
-		gdk_colormap_free_colors(cmap, &gray1, 1);
 		}
 
 	d = gkrellm_create_decal_pixmap(p, pixmap, mask, 2, NULL, x, y);
